@@ -1,15 +1,50 @@
 import React from "react";
 import Logo from "../Logo/Logo";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
+import useAuth from "../../Hooks/useAuth";
 
 const Navbar = () => {
-    const links=<>
-    <NavLink to='/service' className='text-gray-700 mr-5 font-semibold'>Services</NavLink>
-    <NavLink to='/covarage' className='text-gray-700 mr-5 font-semibold'>Coverage</NavLink>
-    <NavLink to='/about-us' className='text-gray-700 mr-5 font-semibold'>About Us</NavLink>
-    <NavLink to='/pricing' className='text-gray-700 mr-5 font-semibold'>Pricing</NavLink>
-    <NavLink to='/be-a-rider' className='text-gray-700 mr-5 font-semibold'>Be a Rider</NavLink>
+   const { user,logOut } = useAuth();
+  const links = (
+    <>
+      <NavLink to="/service" className="text-gray-700 mr-5 font-semibold">
+        Services
+      </NavLink>
+      <NavLink to="/send-parcel" className="text-gray-700 mr-5 font-semibold">
+        Send  parcel
+      </NavLink>
+      <NavLink to="/covarage" className="text-gray-700 mr-5 font-semibold">
+        Coverage
+      </NavLink>
+      <NavLink to="/about-us" className="text-gray-700 mr-5 font-semibold">
+        About Us
+      </NavLink>
+      <NavLink to="/pricing" className="text-gray-700 mr-5 font-semibold">
+        Pricing
+      </NavLink>
+      <NavLink to="/be-a-rider" className="text-gray-700 mr-5 font-semibold">
+        Be a Rider
+      </NavLink>
+
+       {
+        user&&<>
+        <NavLink to="/dashboard/my-parcel" className="text-gray-700 mr-5 font-semibold">
+        My parcel
+      </NavLink>
+        </>
+       }
+
     </>
+  );
+ 
+  
+  console.log(user);
+  const handleLogOut=()=>{
+    logOut()
+    .then()
+    .catch(err=>console.log(err))
+  }
+
   return (
     <div className="navbar bg-base-100 ">
       <div className="navbar-start">
@@ -35,19 +70,21 @@ const Navbar = () => {
             tabIndex="-1"
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
-           {links}
+            {links}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl"><Logo/></a>
+        <div className="btn btn-ghost text-xl">
+          <Logo />
+        </div>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          {links}
-        </ul>
+        <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Button</a>
+        {user?<Link onClick={handleLogOut}  className="btn">Logout</Link>:<Link to='/login' className="btn">Login</Link>}
+        <Link to='/rider' className="btn btn-primary text-black ml-2">Be a rider</Link>
       </div>
+
     </div>
   );
 };
